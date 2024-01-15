@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -11,12 +11,12 @@ const AppPhonebook = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(()=>{
-      console.log('Running effect hook')
-      axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
+    console.log('Running effect hook')
+    personService
+      .getAll()
+      .then(returnedPersons => {
         console.log('promise fulfilled')
-        setPersons(response.data)
+        setPersons(returnedPersons)
       })
   }, [])
 
@@ -30,9 +30,15 @@ const AppPhonebook = () => {
             name: newName,
             number: newNumber
         }
-        setPersons(persons.concat(personObject))
-        setNewName('')
-        setNewNumber('')
+
+        personService
+          .create(personObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+            setNewName('')
+            setNewNumber('')
+            console.log('New person name set in server and application status')
+          })
     }
   }
 
