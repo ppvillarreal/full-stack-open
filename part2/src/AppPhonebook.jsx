@@ -30,7 +30,6 @@ const AppPhonebook = () => {
             name: newName,
             number: newNumber
         }
-
         personService
           .create(personObject)
           .then(returnedPerson => {
@@ -39,6 +38,19 @@ const AppPhonebook = () => {
             setNewNumber('')
             console.log('New person name set in server and application status')
           })
+    }
+  }
+
+  const deletePerson = (person) => {
+    const confirm = window.confirm(`Delete ${person.name}?`)
+    if (confirm) {
+      personService
+        .deletePerson(person)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== person.id))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
@@ -64,7 +76,7 @@ const AppPhonebook = () => {
       <h2>Add New Contact</h2>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons persons ={persons} filter={filter}/>
+      <Persons persons ={persons} filter={filter} deletePerson={deletePerson}/>
     </div>
   )
 }
