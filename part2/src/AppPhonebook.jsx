@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Notification from './components/Notification'
+import ErrorNotification from './components/ErrorNotification'
 
 const AppPhonebook = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,7 +12,7 @@ const AppPhonebook = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
-  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(()=>{
     console.log('Running effect hook')
@@ -44,6 +45,9 @@ const AppPhonebook = () => {
             console.log('Person name updated in server and application status')
             setNotificationMessage(`${returnedPerson.name} was updated on your phonebook`)
             setTimeout(()=>setNotificationMessage(null),5000)
+          }).catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(()=>setErrorMessage(null),5000)
           })
       }  
     } else {
@@ -91,6 +95,7 @@ const AppPhonebook = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorNotification message={errorMessage} />
       <Notification message={notificationMessage} />
       <Filter filterValue={filter} filterChangeFunction={handleFilterChange}/>
       <h2>Add New Contact</h2>
