@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
+
+app.use(cors())
 var morgan = require('morgan')
 
 app.use(express.json());
@@ -93,7 +96,7 @@ app.post('/api/phonebook', (request, response) => {
   
     phonebook = phonebook.concat(contact)
   
-    response.json(phonebook)
+    response.json(contact)
 })
 
 const unknownEndpoint = (request, response) => {
